@@ -40,136 +40,46 @@
             attribution: '&copy; <a href="http>//www.openstreetmap.org/copyright">OpenStreetMap</a>'
         }).addTo(map);
 
-        var as1 = L.circle([-21.533773, -50.625290], {
-            color: '#FFA500',
-            fillColor: '#FFA500',
-            fillOpacity: 0.5,
-            radius: 400000
-        }).addTo(map);
-        var as2 = L.circle([-8.533773, -42.625290], {
-            color: '#FF0000',
-            fillColor: '#FF0000',
-            fillOpacity: 0.5,
-            radius: 500000
-        }).addTo(map);
-        
+        function createHeatArea(lat, long, color, radius) {
+            var point = L.circle([lat, long], {
+                color: color,
+                fillColor: color,
+                fillOpacity: 0.5,
+                radius: radius
+            }).addTo(map);
+        }
+
+        // mapas de calor da américa do sul
+        createHeatArea(-21.533773, -50.625290, '#FFA500', 400000);
+        createHeatArea(-8.533773, -42.625290, '#FF0000', 500000);
+
         // mapas de calor da america do norte
-        var an1 = L.circle([34.897203, -115.93118], {
-            color: '#F5F527',
-            fillColor: '#F5F527',
-            fillOpacity: 0.5,
-            radius: 500000
-        }).addTo(map);
-        var an2 = L.circle([44.910274, -120.85261], {
-            color: '#FFA500',
-            fillColor: '#FFA500',
-            fillOpacity: 0.5,
-            radius: 500000
-        }).addTo(map);
-        var an3 = L.circle([33.809069, -97.563699], {
-            color: '#FFA500',
-            fillColor: '#FFA500',
-            fillOpacity: 0.5,
-            radius: 500000
-        }).addTo(map);
-        var an4 = L.circle([34.897203, -81.481167], {
-            color: '#FF0000',
-            fillColor: '#FF0000',
-            fillOpacity: 0.5,
-            radius: 500000
-        }).addTo(map);
-        var an5 = L.circle([40.45623, -77.262798], {
-            color: '#FF0000',
-            fillColor: '#FF0000',
-            fillOpacity: 0.5,
-            radius: 187000
-        }).addTo(map);
+        createHeatArea(34.897203, -115.93118, '#F5F527', 500000);
+        createHeatArea(44.910274, -120.85261, '#FFA500', 500000);
+        createHeatArea(33.809069, -97.563699, '#FFA500', 500000);
+        createHeatArea(34.897203, -81.481167, '#FF0000', 500000);
+        createHeatArea(40.45623, -77.262798, '#FF0000', 187000);
 
         // mapas de calor da europa
-        var eu1 = L.circle([39.242449, -5.979992], {
-            color: '#F5F527',
-            fillColor: '#F5F527',
-            fillOpacity: 0.5,
-            radius: 500000
-        }).addTo(map);
-        var eu2 = L.circle([39.174361, 21.615171], {
-            color: '#FF0000',
-            fillColor: '#FF0000',
-            fillOpacity: 0.5,
-            radius: 300000
-        }).addTo(map);
-        var eu3 = L.circle([38.969704, 43.585843], {
-            color: '#FF0000',
-            fillColor: '#FF0000',
-            fillOpacity: 0.5,
-            radius: 400000
-        }).addTo(map);
+        createHeatArea(39.242449, -5.979992, '#F5F527', 500000);
+        createHeatArea(39.174361, 21.615171, '#FF0000', 300000);
+        createHeatArea(38.969704, 43.585843, '#FF0000', 400000);
 
         // mapas de calor da africa
-        var af1 = L.circle([25.814904, -1.146444], {
-            color: '#FFA500',
-            fillColor: '#FFA500',
-            fillOpacity: 0.5,
-            radius: 750000
-        }).addTo(map);
-        var af1 = L.circle([-2.712131, 18.188636], {
-            color: '#FF0000',
-            fillColor: '#FF0000',
-            fillOpacity: 0.5,
-            radius: 750000
-        }).addTo(map);
-        var af3 = L.circle([-18.548712, 26.713256], {
-            color: '#FF0000',
-            fillColor: '#FF0000',
-            fillOpacity: 0.5,
-            radius: 750000
-        }).addTo(map);
+        createHeatArea(25.814904, -1.146444, '#FFA500', 750000);
+        createHeatArea(-2.712131, 18.188636, '#FF0000', 750000);
+        createHeatArea(-18.548712, 26.713256, '#FF0000', 750000);
 
         // mapas de calor da ásia
-        var as1 = L.circle([29.317528, 64.333127], {
-            color: '#FF0000',
-            fillColor: '#FF0000',
-            fillOpacity: 0.5,
-            radius: 450000
-        }).addTo(map);
-        var as2 = L.circle([23.577857, 84.897676], {
-            color: '#FF0000',
-            fillColor: '#FF0000',
-            fillOpacity: 0.5,
-            radius: 550000
-        }).addTo(map);
-        var as3 = L.circle([28.933727, 110.120006], {
-            color: '#FFA500',
-            fillColor: '#FFA500',
-            fillOpacity: 0.5,
-            radius: 750000
-        }).addTo(map);
+        createHeatArea(29.317528, 64.333127, '#FF0000', 450000);
+        createHeatArea(23.577857, 84.897676, '#FF0000', 550000);
+        createHeatArea(28.933727, 110.120006, '#FFA500', 750000);
 
         // mapas de calor da oceania
-        var oc1 = L.circle([0.27004, 113.727507], {
-            color: '#F5F527',
-            fillColor: '#F5F527',
-            fillOpacity: 0.5,
-            radius: 350000
-        }).addTo(map);
-        var oc2 = L.circle([-28.370687, 143.595632], {
-            color: '#FFA500',
-            fillColor: '#FFA500',
-            fillOpacity: 0.5,
-            radius: 950000
-        }).addTo(map);
-        var oc3 = L.circle([-3.243079, 103.972529], {
-            color: '#FF0000',
-            fillColor: '#FF0000',
-            fillOpacity: 0.5,
-            radius: 550000
-        }).addTo(map);
-        var oc4 = L.circle([-6.045445, 142.465146], {
-            color: '#F5F527',
-            fillColor: '#F5F527',
-            fillOpacity: 0.5,
-            radius: 350000
-        }).addTo(map);
+        createHeatArea(0.27004, 113.727507, '#F5F527', 350000);
+        createHeatArea(-28.370687, 143.595632, '#FFA500', 950000);
+        createHeatArea(-3.243079, 103.972529, '#FF0000', 550000);
+        createHeatArea(-6.045445, 142.465146, '#F5F527', 350000);
 
         // exemplo de como adicionar um poligono, porém acredito que seja melhor utilizar circulos:
         // var polygon = L.polygon([[-20.904221, -41.990016], [-17.900211, -40.715717], [-18.338657, -39.683095], [-21.221971, -40.973872]], {color: '#FF0000', fillColor: '#FF0000', fillOpacity: 0.5}).addTo(map);
