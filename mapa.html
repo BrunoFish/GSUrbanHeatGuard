@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mapa de calor</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <style>
+        /* 
+        cor amarela: #F5F527
+        cor laranja: #FFA500
+        cor vermelha: #FF0000
+        */
+        body {
+            margin: 0;
+            padding: 0;
+        }
+        #map {
+            height: 100vh;
+            width: 100%;
+        }
+    </style>
+</head>
+    <div id="regiao" ></div>
+    <body>
+        <div id="map"></div>
+    </body>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+    crossorigin=""></script>
+    
+    <script>
+        var regiaoInicial = localStorage.getItem("area")
+        var novaRegiao = regiaoInicial ? JSON.parse(regiaoInicial) : [-24.599111, -62.101541];
+        var map = L.map('map').setView(novaRegiao, 4);
+        
+        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom:19,
+            attribution: '&copy; <a href="http>//www.openstreetmap.org/copyright">OpenStreetMap</a>'
+        }).addTo(map);
+
+        var as1 = L.circle([-21.533773, -50.625290], {
+            color: '#FFA500',
+            fillColor: '#FFA500',
+            fillOpacity: 0.5,
+            radius: 400000
+        }).addTo(map);
+        var as2 = L.circle([-8.533773, -42.625290], {
+            color: '#FF0000',
+            fillColor: '#FF0000',
+            fillOpacity: 0.5,
+            radius: 500000
+        }).addTo(map);
+        
+        // mapas de calor da america do norte
+        var an1 = L.circle([34.897203, -115.93118], {
+            color: '#F5F527',
+            fillColor: '#F5F527',
+            fillOpacity: 0.5,
+            radius: 500000
+        }).addTo(map);
+        var an2 = L.circle([44.910274, -120.85261], {
+            color: '#FFA500',
+            fillColor: '#FFA500',
+            fillOpacity: 0.5,
+            radius: 500000
+        }).addTo(map);
+        var an3 = L.circle([33.809069, -97.563699], {
+            color: '#FFA500',
+            fillColor: '#FFA500',
+            fillOpacity: 0.5,
+            radius: 500000
+        }).addTo(map);
+        var an4 = L.circle([34.897203, -81.481167], {
+            color: '#FF0000',
+            fillColor: '#FF0000',
+            fillOpacity: 0.5,
+            radius: 500000
+        }).addTo(map);
+        var an5 = L.circle([40.45623, -77.262798], {
+            color: '#FF0000',
+            fillColor: '#FF0000',
+            fillOpacity: 0.5,
+            radius: 187000
+        }).addTo(map);
+
+        // mapas de calor da europa
+        var eu1 = L.circle([39.242449, -5.979992], {
+            color: '#F5F527',
+            fillColor: '#F5F527',
+            fillOpacity: 0.5,
+            radius: 500000
+        }).addTo(map);
+        var eu2 = L.circle([39.174361, 21.615171], {
+            color: '#FF0000',
+            fillColor: '#FF0000',
+            fillOpacity: 0.5,
+            radius: 300000
+        }).addTo(map);
+        var eu3 = L.circle([38.969704, 43.585843], {
+            color: '#FF0000',
+            fillColor: '#FF0000',
+            fillOpacity: 0.5,
+            radius: 400000
+        }).addTo(map);
+
+        // mapas de calor da africa
+        var af1 = L.circle([25.814904, -1.146444], {
+            color: '#FFA500',
+            fillColor: '#FFA500',
+            fillOpacity: 0.5,
+            radius: 750000
+        }).addTo(map);
+        var af1 = L.circle([-2.712131, 18.188636], {
+            color: '#FF0000',
+            fillColor: '#FF0000',
+            fillOpacity: 0.5,
+            radius: 750000
+        }).addTo(map);
+        var af3 = L.circle([-18.548712, 26.713256], {
+            color: '#FF0000',
+            fillColor: '#FF0000',
+            fillOpacity: 0.5,
+            radius: 750000
+        }).addTo(map);
+
+        // mapas de calor da ásia
+        var as1 = L.circle([29.317528, 64.333127], {
+            color: '#FF0000',
+            fillColor: '#FF0000',
+            fillOpacity: 0.5,
+            radius: 450000
+        }).addTo(map);
+        var as2 = L.circle([23.577857, 84.897676], {
+            color: '#FF0000',
+            fillColor: '#FF0000',
+            fillOpacity: 0.5,
+            radius: 550000
+        }).addTo(map);
+        var as3 = L.circle([28.933727, 110.120006], {
+            color: '#FFA500',
+            fillColor: '#FFA500',
+            fillOpacity: 0.5,
+            radius: 750000
+        }).addTo(map);
+
+        // mapas de calor da oceania
+        var oc1 = L.circle([0.27004, 113.727507], {
+            color: '#F5F527',
+            fillColor: '#F5F527',
+            fillOpacity: 0.5,
+            radius: 350000
+        }).addTo(map);
+        var oc2 = L.circle([-28.370687, 143.595632], {
+            color: '#FFA500',
+            fillColor: '#FFA500',
+            fillOpacity: 0.5,
+            radius: 950000
+        }).addTo(map);
+        var oc3 = L.circle([-3.243079, 103.972529], {
+            color: '#FF0000',
+            fillColor: '#FF0000',
+            fillOpacity: 0.5,
+            radius: 550000
+        }).addTo(map);
+        var oc4 = L.circle([-6.045445, 142.465146], {
+            color: '#F5F527',
+            fillColor: '#F5F527',
+            fillOpacity: 0.5,
+            radius: 350000
+        }).addTo(map);
+
+        // exemplo de como adicionar um poligono, porém acredito que seja melhor utilizar circulos:
+        // var polygon = L.polygon([[-20.904221, -41.990016], [-17.900211, -40.715717], [-18.338657, -39.683095], [-21.221971, -40.973872]], {color: '#FF0000', fillColor: '#FF0000', fillOpacity: 0.5}).addTo(map);
+
+        // auxiliar para achar pontos no mapa:
+        // function onMapClick(e) {
+        //     console.log("You clicked the map at " + e.latlng);
+        // }
+        // map.on('click', onMapClick);
+    </script>
+</html>
