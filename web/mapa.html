@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mapa de calor</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <style>
+        /* 
+        cor amarela: #F5F527
+        cor laranja: #FFA500
+        cor vermelha: #FF0000
+        */
+        body {
+            margin: 0;
+            padding: 0;
+        }
+        #map {
+            height: 100vh;
+            width: 100%;
+        }
+    </style>
+</head>
+    <div id="regiao" ></div>
+    <body>
+        <div id="map"></div>
+    </body>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+    crossorigin=""></script>
+    
+    <script>
+        var regiaoInicial = localStorage.getItem("area")
+        var novaRegiao = regiaoInicial ? JSON.parse(regiaoInicial) : [-24.599111, -62.101541];
+        var map = L.map('map').setView(novaRegiao, 4);
+        
+        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom:19,
+            attribution: '&copy; <a href="http>//www.openstreetmap.org/copyright">OpenStreetMap</a>'
+        }).addTo(map);
+
+        function createHeatArea(lat, long, color, radius) {
+            var point = L.circle([lat, long], {
+                color: color,
+                fillColor: color,
+                fillOpacity: 0.5,
+                radius: radius
+            }).addTo(map);
+        }
+
+        // mapas de calor da américa do sul
+        createHeatArea(-21.533773, -50.625290, '#FFA500', 400000);
+        createHeatArea(-8.533773, -42.625290, '#FF0000', 500000);
+
+        // mapas de calor da america do norte
+        createHeatArea(34.897203, -115.93118, '#F5F527', 500000);
+        createHeatArea(44.910274, -120.85261, '#FFA500', 500000);
+        createHeatArea(33.809069, -97.563699, '#FFA500', 500000);
+        createHeatArea(34.897203, -81.481167, '#FF0000', 500000);
+        createHeatArea(40.45623, -77.262798, '#FF0000', 187000);
+
+        // mapas de calor da europa
+        createHeatArea(39.242449, -5.979992, '#F5F527', 500000);
+        createHeatArea(39.174361, 21.615171, '#FF0000', 300000);
+        createHeatArea(38.969704, 43.585843, '#FF0000', 400000);
+
+        // mapas de calor da africa
+        createHeatArea(25.814904, -1.146444, '#FFA500', 750000);
+        createHeatArea(-2.712131, 18.188636, '#FF0000', 750000);
+        createHeatArea(-18.548712, 26.713256, '#FF0000', 750000);
+
+        // mapas de calor da ásia
+        createHeatArea(29.317528, 64.333127, '#FF0000', 450000);
+        createHeatArea(23.577857, 84.897676, '#FF0000', 550000);
+        createHeatArea(28.933727, 110.120006, '#FFA500', 750000);
+
+        // mapas de calor da oceania
+        createHeatArea(0.27004, 113.727507, '#F5F527', 350000);
+        createHeatArea(-28.370687, 143.595632, '#FFA500', 950000);
+        createHeatArea(-3.243079, 103.972529, '#FF0000', 550000);
+        createHeatArea(-6.045445, 142.465146, '#F5F527', 350000);
+
+        // exemplo de como adicionar um poligono, porém acredito que seja melhor utilizar circulos:
+        // var polygon = L.polygon([[-20.904221, -41.990016], [-17.900211, -40.715717], [-18.338657, -39.683095], [-21.221971, -40.973872]], {color: '#FF0000', fillColor: '#FF0000', fillOpacity: 0.5}).addTo(map);
+
+        // auxiliar para achar pontos no mapa:
+        // function onMapClick(e) {
+        //     console.log("You clicked the map at " + e.latlng);
+        // }
+        // map.on('click', onMapClick);
+    </script>
+</html>

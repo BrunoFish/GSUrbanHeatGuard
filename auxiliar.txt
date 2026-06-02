@@ -1,3 +1,0 @@
-cor amarela: #F5F527
-cor laranja: #FFA500
-aor vermelha: #FF0000
