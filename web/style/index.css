@@ -1,0 +1,159 @@
+/* Layout Principal do Dashboard */
+.container {
+    padding: 2rem 5%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.dashboard-header {
+    margin-bottom: 2.5rem;
+    text-align: center;
+}
+
+.dashboard-header h2 {
+    font-size: 2.4rem;
+    font-weight: 800;
+    letter-spacing: -1px;
+    color: var(--text-main);
+    margin-bottom: 0.5rem;
+}
+
+.dashboard-header p {
+    color: var(--text-muted);
+    font-size: 1.05rem;
+}
+
+/* Cards com Neo-Glassmorphism */
+.card {
+    background: var(--glass-bg);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    padding: 1.8rem;
+    border-radius: 24px; /* Cantos mais suaves */
+    box-shadow: var(--glass-shadow);
+    /* Borda sutil + Inner Glow branco simulando reflexo no vidro */
+    border: 1px solid var(--glass-border);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.5), 0 8px 24px rgba(0,0,0,0.04);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-4px);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.8), 0 12px 32px rgba(0,0,0,0.08);
+}
+
+.grid-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2.5rem;
+}
+
+.card h3 {
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: var(--text-muted);
+    margin-bottom: 0.8rem;
+    font-weight: 600;
+}
+
+.card .valor {
+    font-size: 2.8rem;
+    font-weight: 800;
+    letter-spacing: -1px;
+}
+
+.valor.critico { color: var(--danger-color); }
+.valor.atencao { color: var(--warning-color); }
+
+.grid-conteudo {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 1.5rem;
+}
+
+@media (max-width: 768px) {
+    .grid-conteudo {
+        grid-template-columns: 1fr;
+    }
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+/* Select mais limpo */
+select {
+    padding: 0.9rem 1rem;
+    background-color: rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(8px);
+    color: var(--text-main);
+    border: 1px solid rgba(255, 255, 255, 0.9);
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 500;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+select:focus {
+    background-color: rgba(255, 255, 255, 0.9);
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15);
+}
+
+/* ================================================== */
+/* BOTÃO SOLICITADO (Fundo transparente, borda forte) */
+/* ================================================== */
+button {
+    padding: 1rem;
+    background: rgba(2, 132, 199, 0.1); /* Fundo semi-transparente do tom do azul */
+    color: var(--primary-color); /* Texto azul */
+    border: 2px solid var(--primary-color); /* Borda azul visível */
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 1.05rem;
+    cursor: pointer;
+    backdrop-filter: blur(4px);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+button:hover {
+    background: rgba(2, 132, 199, 0.15);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(2, 132, 199, 0.2);
+}
+
+button:active {
+    transform: translateY(0);
+}
+
+/* Lista de Alertas Recentes */
+#lista-alertas {
+    margin-top: 1rem;
+}
+
+.alerta-item {
+    background-color: rgba(255, 255, 255, 0.4);
+    backdrop-filter: blur(8px);
+    padding: 1rem 1.2rem;
+    border-radius: 12px;
+    margin-bottom: 0.8rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-left: 4px solid; 
+    border-top: 1px solid rgba(255,255,255,0.6);
+    border-right: 1px solid rgba(255,255,255,0.6);
+    border-bottom: 1px solid rgba(255,255,255,0.6);
+    transition: all 0.3s;
+}
+
+.alerta-item:hover {
+    background-color: rgba(255, 255, 255, 0.7);
+    transform: translateX(4px); /* Animação super sutil pro lado ao passar o mouse */
+}

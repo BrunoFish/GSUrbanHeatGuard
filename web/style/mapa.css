@@ -1,0 +1,150 @@
+/* Container base do mapa para não ter barra de rolagem */
+body, html {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+}
+
+#map {
+    height: 100vh;
+    width: 100%;
+    z-index: 1; /* Mapa no fundo */
+}
+
+/* ========================================= */
+/* ELEMENTOS FLUTUANTES (NEO-GLASSMORPHISM)  */
+/* ========================================= */
+.flutuante {
+    position: absolute;
+    z-index: 2000; /* Fica acima do mapa (Leaflet usa 1000) */
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* Posições exatas solicitadas */
+.pos-top-left { top: 20px; left: 60px; } /* Deslocado para não cobrir o Zoom do Leaflet */
+.pos-top-right { top: 20px; right: 20px; align-items: flex-end; }
+.pos-bottom-right { bottom: 30px; right: 20px; }
+.pos-bottom-left { bottom: 30px; left: 20px; }
+
+/* Botões do Mapa */
+.btn-mapa {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid var(--glass-border, rgba(255,255,255,0.8));
+    padding: 0.8rem 1.2rem;
+    border-radius: 12px;
+    font-weight: 700;
+    color: var(--primary-color, #0284c7);
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+}
+
+.btn-mapa:hover {
+    background: rgba(255, 255, 255, 0.9);
+    transform: translateY(-2px);
+}
+
+/* Botão menos destacado (Sobre) */
+.btn-secundario {
+    background: rgba(255, 255, 255, 0.3);
+    color: var(--text-muted, #475569);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    font-weight: 500;
+    font-size: 0.9rem;
+    padding: 0.6rem 1rem;
+}
+
+.btn-secundario:hover {
+    background: rgba(255, 255, 255, 0.6);
+    color: var(--primary-color, #0284c7);
+}
+
+/* Painéis de Vidro (Janelas flutuantes) */
+.painel-vidro {
+    background: rgba(255, 255, 255, 0.5);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.5), 0 8px 32px rgba(0,0,0,0.1);
+    border-radius: 16px;
+    padding: 1.5rem;
+    width: 300px;
+    display: none; /* Escondido por padrão */
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+.painel-vidro.ativo {
+    display: block;
+}
+
+/* Textos e inputs dentro do painel */
+.painel-vidro h3 {
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+    color: var(--text-main, #0f172a);
+}
+
+.painel-vidro input, .painel-vidro select {
+    width: 100%;
+    padding: 0.6rem;
+    margin-bottom: 0.8rem;
+    border-radius: 8px;
+    border: 1px solid rgba(255,255,255,0.9);
+    background: rgba(255,255,255,0.7);
+    outline: none;
+}
+
+/* Itens da Legenda */
+.legenda-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.cor-box {
+    width: 20px;
+    height: 20px;
+    border-radius: 4px;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* ========================================= */
+/* TOOLTIP DE COORDENADAS (MOUSE)            */
+/* ========================================= */
+.tooltip-vidro {
+    position: absolute;
+    z-index: 3000; /* Fica acima de tudo */
+    background: rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    padding: 0.4rem 0.8rem;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--primary-color, #0284c7);
+    pointer-events: none; /* Fundamental: impede que a caixa bloqueie os cliques no mapa! */
+    display: none; /* Começa invisível até o mouse mexer */
+    transform: translate(15px, 15px); /* Dá um espacinho do cursor para não ficar embaixo da setinha */
+}
+
+/* Adicione ou atualize este bloco no mapa.css */
+#detalheTemp {
+    /* O text-shadow cria um efeito de brilho escuro ao redor do número */
+    text-shadow: 0px 0px 6px rgba(0, 0, 0, 0.8), 0px 0px 2px rgba(0, 0, 0, 0.194);
+    font-weight: 700; /* Deixa o número mais robusto */
+}
