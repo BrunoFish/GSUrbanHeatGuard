@@ -1,0 +1,133 @@
+/* ==========================================================================
+   Layout Adaptado do Dashboard - Neo-Glassmorphism
+   ========================================================================== */
+
+.container {
+    padding: 2rem 5%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.dashboard-header {
+    margin-bottom: 2.5rem;
+    text-align: center;
+}
+
+.dashboard-header h2 {
+    font-size: 2.4rem;
+    font-weight: 800;
+    letter-spacing: -1px;
+    color: var(--text-main);
+    margin-bottom: 0.5rem;
+}
+
+.dashboard-header p {
+    color: var(--text-muted);
+    font-size: 1.05rem;
+}
+
+/* Reutilização dos Cards de Vidro */
+.card {
+    background: var(--glass-bg);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    padding: 2rem;
+    border-radius: 24px;
+    border: 1px solid var(--glass-border);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.5), 0 8px 24px rgba(0,0,0,0.04);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-4px);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.8), 0 12px 32px rgba(0,0,0,0.08);
+}
+
+.card h3 {
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: var(--text-main);
+    margin-bottom: 1rem;
+    font-weight: 700;
+}
+
+/* Grid Customizado para a seção do Desafio e Solução */
+.grid-conteudo-sobre {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 2.5rem;
+}
+
+.text-sobre {
+    color: var(--text-muted);
+    line-height: 1.6;
+    font-size: 1rem;
+}
+
+/* Customização das bordas dos Cards principais */
+.card-desafio {
+    border-left: 5px solid var(--danger-color);
+}
+
+.card-solucao {
+    border-left: 5px solid var(--primary-color);
+}
+
+/* Container de Pilares Inferior */
+.section-pilares {
+    margin-bottom: 2.5rem;
+}
+
+.grid-pilares {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.2rem;
+}
+
+/* Reutilização do layout .alerta-item do Dashboard */
+.alerta-item {
+    background-color: rgba(255, 255, 255, 0.4);
+    backdrop-filter: blur(8px);
+    padding: 1.5rem;
+    border-radius: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    border-top: 1px solid rgba(255,255,255,0.6);
+    border-right: 1px solid rgba(255,255,255,0.6);
+    border-bottom: 1px solid rgba(255,255,255,0.6);
+    transition: all 0.3s;
+}
+
+.alerta-item:hover {
+    background-color: rgba(255, 255, 255, 0.7);
+    transform: translateX(4px);
+}
+
+/* Cores das bordas laterais baseadas nos alertas */
+.pilar-item-blue { border-left: 5px solid var(--primary-color); }
+.pilar-item-green { border-left: 5px solid #10b981; }
+.pilar-item-warning { border-left: 5px solid var(--warning-color); }
+
+.pilar-info h4 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--text-main);
+    margin-bottom: 0.4rem;
+}
+
+.pilar-info p {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    line-height: 1.4;
+    margin: 0;
+}
+
+/* Responsividade Básica */
+@media (max-width: 768px) {
+    .grid-conteudo-sobre {
+        grid-template-columns: 1fr;
+    }
+}
