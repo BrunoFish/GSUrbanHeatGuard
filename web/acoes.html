@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UrbanHeat Guard | Planos de Ação</title>
+    <link rel="stylesheet" href="style/global.css">
+    <link rel="stylesheet" href="style/acoes.css">
+</head>
+<body>
+
+    <header>
+        <h1>UrbanHeat Guard</h1>
+        <nav>
+            <a href="index.html">Dashboard</a>
+            <a href="mapa.html">Mapa Global</a>
+            <a href="sobre.html">Sobre o Projeto</a>
+            <a href="acoes.html" class="active">Planos de Ação</a>
+        </nav>
+    </header>
+
+    <div class="container">
+        <div class="dashboard-header">
+            <h2>Planos de Contingência e Mitigação</h2>
+            <p>Selecione um nível de criticidade abaixo para que a IA do ecossistema gere o plano de resposta recomendado.</p>
+        </div>
+
+        <div class="grid-conteudo-unico">
+            <div class="card card-central">
+                <h3>Central de Resposta a Desastres Térmicos</h3>
+                <p class="instrucao">
+                    Simule a resposta governamental baseada na telemetria atual dos sensores IoT.
+                </p>
+                <div class="form-group">
+                    <select name="nivel-alerta" id="nivel-alerta">
+                        <option value="critico">Zonas Críticas (Acima de 35°C)</option>
+                        <option value="atencao" selected>Zonas de Atenção (30°C a 35°C)</option>
+                        <option value="estavel">Zonas Estáveis (Abaixo de 30°C)</option>
+                    </select>
+                    <button id="btn-gerar-plano">Atualizar Diretrizes Operacionais</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid-cards" id="container-planos">
+            </div>
+
+        <div class="card" style="margin-top: 2.5rem;">
+            <h3 style="color: var(--text-main); margin-bottom: 1rem;">Protocolo Resiliente</h3>
+            <div class="alerta-item-static">
+                <div class="pilar-info">
+                    <h4>Automação Governamental</h4>
+                    <p>Ao integrar os sensores IoT diretamente aos planos de ação, o UrbanHeat Guard diminui o tempo de resposta de intervenção urbana de semanas para minutos, mitigando picos de calor extremo antes que saturem a rede elétrica e o sistema de saúde.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const btn = document.getElementById('btn-gerar-plano');
+        const select = document.getElementById('nivel-alerta');
+        const container = document.getElementById('container-planos');
+
+        // Banco de dados dos planos de ação baseado no nível selecionado
+        const bancoPlanos = {
+            critico: [
+                {
+                    titulo: "Refúgios Climáticos",
+                    borda: "#ef4444",
+                    texto: "Abertura imediata de prédios públicos climatizados e distribuição de água em pontos estratégicos para populações vulneráveis nas áreas mapeadas."
+                },
+                {
+                    titulo: "Operação Água Urbana",
+                    borda: "#ef4444",
+                    texto: "Acionamento de caminhões-pipa para umedecimento de grandes vias asfálticas de alto tráfego, forçando a queda imediata da temperatura de superfície por evaporação."
+                },
+                {
+                    titulo: "Alerta de Rede Elétrica",
+                    borda: "#ef4444",
+                    texto: "Disparo de notificação automática para as concessionárias de energia prevendo picos de sobrecarga devido ao uso em massa de ar-condicionado na região."
+                }
+            ],
+            atencao: [
+                {
+                    titulo: "Zonamento Ecológico",
+                    borda: "var(--warning-color)",
+                    texto: "Inclusão do bairro no teto prioritário para receber incentivos de Telhados Verdes e substituição de pavimentos comuns por asfalto permeável."
+                },
+                {
+                    titulo: "Rotas de Micro-Arborização",
+                    borda: "var(--warning-color)",
+                    texto: "Direcionamento das equipes de urbanismo para plantio adensado de mudas nativas em calçadas e canteiros centrais da zona afetada."
+                },
+                {
+                    titulo: "Recomendação de Saúde",
+                    borda: "var(--warning-color)",
+                    texto: "Envio de alertas via SMS/Push para moradores da região sugerindo a suspensão de atividades físicas ao ar livre entre as 11h e 16h."
+                }
+            ],
+            estavel: [
+                {
+                    titulo: "Manutenção Preventiva",
+                    borda: "#10b981",
+                    texto: "Monitoramento contínuo dos sensores de umidade do solo para garantir que a vegetação local continue saudável e cumprindo seu papel térmico."
+                },
+                {
+                    titulo: "Preservação Ativa",
+                    borda: "#10b981",
+                    texto: "Manutenção do plano diretor atual, validando os índices de permeabilidade e evitando o adensamento construtivo predatório na região."
+                },
+                {
+                    titulo: "Relatório de Linha de Base",
+                    borda: "#10b981",
+                    texto: "Armazenamento dos dados estáveis como histórico comparativo para auditorias climáticas futuras e estudos de impacto ambiental."
+                }
+            ]
+        };
+
+        function renderizarPlanos() {
+            const nivel = select.value;
+            const planos = bancoPlanos[nivel];
+            
+            // Limpa o container
+            container.innerHTML = '';
+            
+            // Renderiza os 3 cards corretos com efeitos de fade sutil
+            planos.forEach(plano => {
+                const cardHTML = `
+                    <div class="card" style="border-top: 5px solid ${plano.borda}; opacity: 0; transform: translateY(10px); transition: all 0.4s ease;">
+                        <h3 style="color: ${plano.borda === 'var(--warning-color)' ? 'var(--warning-color)' : plano.borda}; font-weight: 700;">${plano.titulo}</h3>
+                        <p class="text-acoes">${plano.texto}</p>
+                    </div>
+                `;
+                container.insertAdjacentHTML('beforeend', cardHTML);
+            });
+
+            // Ativa a animação de entrada visual
+            setTimeout(() => {
+                const cards = container.querySelectorAll('.card');
+                cards.forEach(card => {
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                });
+            }, 50);
+        }
+
+        // Executa ao clicar e também ao carregar a página pela primeira vez
+        btn.addEventListener('click', renderizarPlanos);
+        window.addEventListener('DOMContentLoaded', renderizarPlanos);
+    </script>
+</body>
+</html>

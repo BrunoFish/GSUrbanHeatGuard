@@ -1,0 +1,121 @@
+/* ==========================================================================
+   Layout Dinâmico - Planos de Resposta Computada
+   ========================================================================== */
+
+.container {
+    padding: 2rem 5%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.dashboard-header {
+    margin-bottom: 2.5rem;
+    text-align: center;
+}
+
+.dashboard-header h2 {
+    font-size: 2.4rem;
+    font-weight: 800;
+    letter-spacing: -1px;
+    color: var(--text-main);
+    margin-bottom: 0.5rem;
+}
+
+.dashboard-header p {
+    color: var(--text-muted);
+    font-size: 1.05rem;
+}
+
+/* Base de Vidro dos Cards */
+.card {
+    background: var(--glass-bg);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    padding: 1.8rem;
+    border-radius: 24px;
+    border: 1px solid var(--glass-border);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.5), 0 8px 24px rgba(0,0,0,0.04);
+}
+
+/* Hover ativo apenas nos cards principais pós renderização */
+.grid-cards .card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease, opacity 0.4s ease !important;
+}
+
+.grid-cards .card:hover {
+    transform: translateY(-4px) !important;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.8), 0 12px 32px rgba(0,0,0,0.08) !important;
+}
+
+.grid-conteudo-unico {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 2.5rem;
+}
+
+.card-central {
+    max-width: 600px;
+    width: 100%;
+    text-align: center;
+}
+
+.instrucao {
+    color: var(--text-muted);
+    margin-bottom: 1.5rem;
+    font-size: 0.95rem;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.grid-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    min-height: 200px; /* Evita que o layout pule ao trocar de opção */
+}
+
+.card h3 {
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: var(--text-main);
+    margin-bottom: 0.8rem;
+    font-weight: 700;
+}
+
+.text-acoes {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin: 0;
+}
+
+.alerta-item-static {
+    background-color: rgba(255, 255, 255, 0.4);
+    backdrop-filter: blur(8px);
+    padding: 1.5rem;
+    border-radius: 12px;
+    border-left: 5px solid #10b981; 
+    border-top: 1px solid rgba(255,255,255,0.6);
+    border-right: 1px solid rgba(255,255,255,0.6);
+    border-bottom: 1px solid rgba(255,255,255,0.6);
+}
+
+.pilar-info h4 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--text-main);
+    margin-bottom: 0.5rem;
+}
+
+.pilar-info p {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    line-height: 1.5;
+    margin: 0;
+}
