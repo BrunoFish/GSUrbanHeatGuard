@@ -8,7 +8,6 @@
     <link rel="stylesheet" href="style/global.css">
     <link rel="stylesheet" href="style/mapa.css">
     <style>
-        /* CSS extra apenas para a lista de coordenadas e troca de abas */
         .secao-painel { display: none; }
         .secao-painel.ativa { display: block; animation: fadeIn 0.3s ease; }
         
@@ -146,19 +145,18 @@
     <script>
         var regiaoInicial = localStorage.getItem("area");
         var novaRegiao = regiaoInicial ? JSON.parse(regiaoInicial) : [-24.599111, -62.101541];
-        // Define as coordenadas máximas do globo terrestre
         var limitesDoMapa = [[-90, -180], [90, 180]]; 
 
         var map = L.map('map', { 
             zoomControl: true,
-            maxBounds: limitesDoMapa, // Trava a câmera para não sair da área do mapa
-            maxBoundsViscosity: 1.0   // Deixa a borda rígida ao bater no limite
+            maxBounds: limitesDoMapa, 
+            maxBoundsViscosity: 1.0   
         }).setView(novaRegiao, 4);
         
         L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
             maxZoom: 19,
-            minZoom: 2, // Evita que o usuário tire tanto zoom que o mapa suma
-            noWrap: true, // ⬅️ A MÁGICA AQUI: Impede a renderização repetida do mapa
+            minZoom: 2, 
+            noWrap: true,
             attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
         }).addTo(map);
 
@@ -196,7 +194,6 @@
             });
 
             layer.on('click', function(e) {
-                // ATIVA A TRAVA PARA O MAPA IGNORAR ESTE CLIQUE QUE VAZOU
                 ignorarCliqueMapa = true;
                 setTimeout(() => ignorarCliqueMapa = false, 100); 
                 
@@ -210,7 +207,6 @@
             });
         }
 
-        // Abre/Fecha painel principal
         document.getElementById('btnFormulario').addEventListener('click', () => {
     document.getElementById('painelGeral').classList.toggle('ativo');
 });
@@ -219,20 +215,16 @@
         });
 
         // --- LÓGICA DE OBJETOS CLICÁVEIS (REGIÕES) ---
-        // Lógica de Negócio: Define a cor com base na temperatura (Igual à legenda)
         function obterCorTemperatura(temp) {
             if (temp >= 35) return '#FF0000'; // Crítico
             if (temp >= 25) return '#FFA500'; // Atenção
             return '#F5F527'; // Normal
         }
 
-        // Função para criar as regiões (agora a cor nasce da temperatura!)
         function criarRegiaoInterativa(lat, lng, raio, dados) {
             const cor = obterCorTemperatura(dados.temperatura); 
             
             const circulo = L.circle([lat, lng], { radius: raio }).addTo(map);
-
-            // APENAS ISTO BASTA! A função mágica já pinta e cria o evento de clique
             aplicarEventosInterativos(circulo, cor, dados);
         }
 
@@ -240,18 +232,15 @@
             document.getElementById('painelGeral').classList.add('ativo');
             mudarEstadoPainel('secaoDetalhes');
             
-            // Nome editável
             const inputNome = document.getElementById('detalheNome');
             inputNome.value = dados.nome;
-            // Salva a edição automaticamente ao mudar o texto
             inputNome.onchange = () => { dados.nome = inputNome.value; };
             
-            document.getElementById('detalheData').innerText = dados.data; // Data agora é tratada
+            document.getElementById('detalheData').innerText = dados.data; 
             document.getElementById('detalheCoords').innerText = `[${dados.lat}, ${dados.lng}]`;
             document.getElementById('detalheRaio').innerText = `${(dados.raio / 1000).toFixed(2)} km`;
             
             const divTemp = document.getElementById('detalheTemp');
-            // Lógica da temperatura com setinha de tendência
             const trend = Math.random() > 0.5 ? "▲" : "▼"; 
             divTemp.innerHTML = `${dados.temperatura}°C <small style="font-size:0.8rem">${trend}</small>`;
             divTemp.style.color = cor;
@@ -272,9 +261,7 @@
         criarRegiaoInterativa(61.5240, 105.3188, 400000, {id: 108, nome: "Sibéria Central", lat: 61.52, lng: 105.31, raio: 400000, equipamento: "Drone", data: "05/06/2026", temperatura: 35.1});
         criarRegiaoInterativa(11.8251, 15.5943, 280000, {id: 109, nome: "Sahel Central", lat: 11.82, lng: 15.59, raio: 280000, equipamento: "Satélite", data: "05/06/2026", temperatura: 39.0});
 
-       // Se clicar no mapa vazio (desseleciona)
         map.on('click', function(e) {
-            // SE A TRAVA ESTIVER ATIVA, O MAPA ABORTA A MISSÃO E NÃO FECHA A JANELA
             if (ignorarCliqueMapa) return;
 
             if(!modoDesenho && secaoDetalhes.classList.contains('ativa')) {
@@ -307,7 +294,6 @@
             modoDesenho = true;
             pontosPoligono = [];
             
-            // Agora volta pro texto inicial em vez de ficar uma barra vazia estranha
             document.getElementById('listaPontosHTML').innerHTML = "<p style='text-align:center; margin-top:30px;'>Aguardando cliques...</p>"; 
             
             if(poligonoFinal) map.removeLayer(poligonoFinal);
@@ -315,7 +301,7 @@
             
             const instrucao = document.getElementById('instrucaoDesenho');
             instrucao.innerText = "Adicionando pontos... (Clique no 1º para fechar)";
-            instrucao.style.color = "#059669"; // Deixa verdinho
+            instrucao.style.color = "#059669"; 
         });
 
         document.getElementById('btnCancelarDesenho').addEventListener('click', limparDesenho);
@@ -326,10 +312,8 @@
             const latlng = e.latlng;
             pontosPoligono.push(latlng);
 
-            // Adiciona na lista visual do formulário
             const listaHTML = document.getElementById('listaPontosHTML');
             
-            // MÁGICA: Se for o primeiro clique, limpa o texto de "Aguardando"
             if (pontosPoligono.length === 1) {
                 listaHTML.innerHTML = "";
             }
@@ -364,7 +348,7 @@
             modoDesenho = false;
             document.getElementById('map').style.cursor = '';
             document.getElementById('instrucaoDesenho').innerText = "Área demarcada. Preencha os dados abaixo.";
-            document.getElementById('instrucaoDesenho').style.color = "#059669"; // Verde
+            document.getElementById('instrucaoDesenho').style.color = "#059669"; 
 
             if (linhaMouse) map.removeLayer(linhaMouse);
             if (linhasTemporarias) map.removeLayer(linhasTemporarias);
@@ -418,21 +402,18 @@
                 return;
             }
 
-            // MÁGICA: Gera a temperatura simulada e descobre a cor correta
             const tempSimulada = (Math.random() * (45 - 15) + 15).toFixed(1);
             const corSorteada = obterCorTemperatura(tempSimulada);
             const dataHoje = new Date().toLocaleDateString('pt-BR');
             
             const dadosNovaRegiao = {id: idReg, nome: nome, lat: lat, lng: lng, raio: raio, equipamento: tipo, data: dataHoje, temperatura: tempSimulada};
 
-            // Aplica os visuais e o evento de clique no polígono
             aplicarEventosInterativos(poligonoFinal, corSorteada, dadosNovaRegiao);
 
-            const poligonoSalvo = poligonoFinal; // Guarda o polígono para não ser apagado
+            const poligonoSalvo = poligonoFinal; 
             poligonoFinal = null; 
             limparDesenho();
 
-            // Dispara um clique automático para já abrir o menu
             poligonoSalvo.fire('click');
             
             alert(`✅ Região "${nome}" criada com sucesso!`);
@@ -441,14 +422,11 @@
        // --- FUNÇÃO PARA EXCLUIR ÁREA ---
         document.getElementById('btnExcluirRegiao').addEventListener('click', () => {
             if (layerSelecionada) {
-                // Lendo o '.value' do input em vez de innerText!
                 const nomeArea = document.getElementById('detalheNome').value;
                 
                 if (confirm(`Tem certeza que deseja excluir o monitoramento em "${nomeArea}"?`)) {
-                    // Remove o objeto visual do mapa Leaflet
                     map.removeLayer(layerSelecionada); 
                     
-                    // Limpa a variável e volta o painel para o estado inicial
                     layerSelecionada = null;
                     mudarEstadoPainel('secaoNeutro');
                     
