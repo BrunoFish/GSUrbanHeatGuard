@@ -142,9 +142,15 @@ body, html {
     transform: translate(15px, 15px); /* Dá um espacinho do cursor para não ficar embaixo da setinha */
 }
 
-/* Adicione ou atualize este bloco no mapa.css */
 #detalheTemp {
-    /* O text-shadow cria um efeito de brilho escuro ao redor do número */
-    text-shadow: 0px 0px 6px rgba(0, 0, 0, 0.8), 0px 0px 2px rgba(0, 0, 0, 0.194);
-    font-weight: 700; /* Deixa o número mais robusto */
+    /* Removemos o text-stroke que causou o bug */
+    /* -webkit-text-stroke: 1px rgba(0, 0, 0, 0.6); */
+    
+    /* Usamos 4 sombras com desfoque ZERO (0) para criar um contorno perfeito e limpo */
+    text-shadow:
+        -1px -1px 0 rgba(0,0,0,0.5),
+         1px -1px 0 rgba(0,0,0,0.5),
+        -1px  1px 0 rgba(0,0,0,0.5),
+         1px  1px 0 rgba(0,0,0,0.5);
+    font-weight: 900; 
 }

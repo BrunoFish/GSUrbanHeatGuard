@@ -94,41 +94,39 @@
             </div>
 
             <div id="secaoDetalhes" class="secao-painel">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-                <h3 style="margin-bottom: 0;">Detalhes da Região</h3>
-                <button id="btnExcluirRegiao" style="background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); color: #ef4444; border-radius: 8px; padding: 4px 8px; cursor: pointer; font-size: 1rem; transition: 0.3s;" title="Remover Área">🗑️</button>
-            </div>
-                <div class="detalhe-item">
-                    <div class="detalhe-label">Nome do Local</div>
-                    <div class="detalhe-valor" id="detalheNome">--</div>
-                </div>
-                <div class="detalhe-item">
-                    <div class="detalhe-label">ID / Equipamento</div>
-                    <div class="detalhe-valor" style="font-size: 0.9rem;" id="detalheEquipamento">--</div>
-                </div>
-                <div class="detalhe-item" style="display: flex; justify-content: space-between;">
-                    <div>
-                        <div class="detalhe-label">Centro (Lat / Lng)</div>
-                        <div class="detalhe-valor" style="font-size: 0.9rem;" id="detalheCoords">--</div>
-                    </div>
-                    <div>
-                        <div class="detalhe-label">Raio Máx.</div>
-                        <div class="detalhe-valor" style="font-size: 0.9rem;" id="detalheRaio">--</div>
-                    </div>
-                </div>
-                <div class="detalhe-item" style="display: flex; justify-content: space-between; align-items: center;">
-                    <div>
-                        <div class="detalhe-label">Status Térmico Atual</div>
-                        <div class="badge-status" id="detalheStatus">--</div>
-                    </div>
-                    <div style="text-align: right;">
-                        <div class="detalhe-label">Temp. Média</div>
-                        <div class="detalhe-valor" style="font-size: 1.4rem;" id="detalheTemp">--</div>
-                    </div>
-                </div>
-                
-                <button class="btn-mapa btn-secundario" id="btnFecharDetalhes" style="width: 100%; margin-top: 15px;">Fechar Informações</button>
-            </div>
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+        <h3 style="margin-bottom: 0;">Detalhes da Região</h3>
+        <button id="btnExcluirRegiao" style="background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); color: #ef4444; border-radius: 8px; padding: 4px 8px; cursor: pointer; font-size: 1rem;" title="Remover Área">🗑️</button>
+    </div>
+    
+    <div class="detalhe-item">
+        <div class="detalhe-label">Nome do Local (Clique para editar)</div>
+        <input type="text" id="detalheNome" style="background:transparent; border:none; border-bottom: 1px solid #ccc; color:var(--text-main); font-size:1.1rem; font-weight:800; width:100%;">
+    </div>
+    
+    <div class="detalhe-item">
+        <div class="detalhe-label">Data de Implantação</div>
+        <div class="detalhe-valor" style="font-size: 0.9rem;" id="detalheData">--</div>
+    </div>
+
+    <div class="detalhe-item" style="display: flex; justify-content: space-between;">
+        <div><div class="detalhe-label">Centro</div><div class="detalhe-valor" style="font-size: 0.8rem;" id="detalheCoords">--</div></div>
+        <div><div class="detalhe-label">Raio</div><div class="detalhe-valor" style="font-size: 0.8rem;" id="detalheRaio">--</div></div>
+    </div>
+    
+    <div class="detalhe-item" style="display: flex; justify-content: space-between; align-items: center;">
+        <div>
+            <div class="detalhe-label">Status Térmico</div>
+            <div class="badge-status" id="detalheStatus">--</div>
+        </div>
+        <div style="text-align: right;">
+            <div class="detalhe-label">Temp. Média</div>
+            <div class="detalhe-valor" style="font-size: 1.4rem;" id="detalheTemp">-- 🌡️</div>
+        </div>
+    </div>
+    
+    <button class="btn-mapa btn-secundario" id="btnFecharDetalhes" style="width: 100%; margin-top: 10px;">Fechar</button>
+</div>
 
         </div>
     </div>
@@ -148,10 +146,19 @@
     <script>
         var regiaoInicial = localStorage.getItem("area");
         var novaRegiao = regiaoInicial ? JSON.parse(regiaoInicial) : [-24.599111, -62.101541];
-        var map = L.map('map', { zoomControl: true }).setView(novaRegiao, 4);
+        // Define as coordenadas máximas do globo terrestre
+        var limitesDoMapa = [[-90, -180], [90, 180]]; 
+
+        var map = L.map('map', { 
+            zoomControl: true,
+            maxBounds: limitesDoMapa, // Trava a câmera para não sair da área do mapa
+            maxBoundsViscosity: 1.0   // Deixa a borda rígida ao bater no limite
+        }).setView(novaRegiao, 4);
         
         L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            maxZoom:19,
+            maxZoom: 19,
+            minZoom: 2, // Evita que o usuário tire tanto zoom que o mapa suma
+            noWrap: true, // ⬅️ A MÁGICA AQUI: Impede a renderização repetida do mapa
             attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
         }).addTo(map);
 
@@ -167,17 +174,16 @@
             document.getElementById(estado).classList.add('ativa');
         }
 
-        // VARIÁVEL GLOBAL PARA CONTROLAR A SELEÇÃO
+        // VARIÁVEL GLOBAL E NOVA TRAVA DE SEGURANÇA
         let layerSelecionada = null;
+        let ignorarCliqueMapa = false; 
 
-        // FUNÇÃO DE FEEDBACK VISUAL (Opacidade 0.3 padrão, 0.7 selecionado)
         function aplicarEventosInterativos(layer, corBase, dados) {
             layer.corOriginal = corBase; 
             
-           // Configurações de transparência que você pediu
-                const estiloNormal = { color: corBase, fillColor: corBase, fillOpacity: 0.3, weight: 2, dashArray: 'none' };
-                const estiloHover = { fillOpacity: 0.5, weight: 3, color: corBase };
-                const estiloSelecionado = { color: '#ffffff', weight: 3, dashArray: '6, 6', fillOpacity: 0.7 };
+            const estiloNormal = { color: corBase, fillColor: corBase, fillOpacity: 0.3, weight: 2, dashArray: 'none' };
+            const estiloHover = { fillOpacity: 0.5, weight: 3, color: corBase };
+            const estiloSelecionado = { color: '#ffffff', weight: 3, dashArray: '6, 6', fillOpacity: 0.7 };
 
             layer.setStyle(estiloNormal);
 
@@ -190,14 +196,14 @@
             });
 
             layer.on('click', function(e) {
-                if (e && e.originalEvent) e.originalEvent.stopPropagation();
+                // ATIVA A TRAVA PARA O MAPA IGNORAR ESTE CLIQUE QUE VAZOU
+                ignorarCliqueMapa = true;
+                setTimeout(() => ignorarCliqueMapa = false, 100); 
                 
-                // Desmarca a anterior
                 if (layerSelecionada && layerSelecionada !== layer) {
                     layerSelecionada.setStyle({ color: layerSelecionada.corOriginal, fillOpacity: 0.3, weight: 2, dashArray: 'none' });
                 }
                 
-                // Marca a nova e chama os dados
                 layerSelecionada = layer;
                 layer.setStyle(estiloSelecionado);
                 selecionarRegiao(dados, corBase);
@@ -213,58 +219,64 @@
         });
 
         // --- LÓGICA DE OBJETOS CLICÁVEIS (REGIÕES) ---
-        // Função para criar as regiões simuladas e torná-las clicáveis
-        function criarRegiaoInterativa(lat, lng, cor, raio, dados) {
-            const circulo = L.circle([lat, lng], {
-                color: cor, fillColor: cor, fillOpacity: 0.5, radius: raio
-            }).addTo(map);
+        // Lógica de Negócio: Define a cor com base na temperatura (Igual à legenda)
+        function obterCorTemperatura(temp) {
+            if (temp >= 35) return '#FF0000'; // Crítico
+            if (temp >= 25) return '#FFA500'; // Atenção
+            return '#F5F527'; // Normal
+        }
 
+        // Função para criar as regiões (agora a cor nasce da temperatura!)
+        function criarRegiaoInterativa(lat, lng, raio, dados) {
+            const cor = obterCorTemperatura(dados.temperatura); 
+            
+            const circulo = L.circle([lat, lng], { radius: raio }).addTo(map);
+
+            // APENAS ISTO BASTA! A função mágica já pinta e cria o evento de clique
             aplicarEventosInterativos(circulo, cor, dados);
-
-            // Adiciona o evento de clique na área
-            circulo.on('click', function(e) {
-                L.DomEvent.stopPropagation(e); // Impede que o clique "vaze" para o mapa
-                selecionarRegiao(dados, cor);
-            });
         }
 
         function selecionarRegiao(dados, cor) {
             document.getElementById('painelGeral').classList.add('ativo');
             mudarEstadoPainel('secaoDetalhes');
             
-            document.getElementById('detalheNome').innerText = dados.nome;
-            document.getElementById('detalheEquipamento').innerText = `ID: ${dados.id} | ${dados.equipamento}`;
+            // Nome editável
+            const inputNome = document.getElementById('detalheNome');
+            inputNome.value = dados.nome;
+            // Salva a edição automaticamente ao mudar o texto
+            inputNome.onchange = () => { dados.nome = inputNome.value; };
+            
+            document.getElementById('detalheData').innerText = dados.data; // Data agora é tratada
             document.getElementById('detalheCoords').innerText = `[${dados.lat}, ${dados.lng}]`;
-            
-            // MÁGICA 1: Converter metros para KM com 2 casas decimais
-            const raioKm = (dados.raio / 1000).toFixed(2);
-            document.getElementById('detalheRaio').innerText = `${raioKm} km`;
-            
-            // MÁGICA 2: Gerar Temperatura baseada na Cor
-            let tempSimulada;
-            if(cor === '#FF0000') tempSimulada = (Math.random() * (45 - 35) + 35).toFixed(1);
-            else if(cor === '#FFA500') tempSimulada = (Math.random() * (34.9 - 25) + 25).toFixed(1);
-            else tempSimulada = (Math.random() * (24.9 - 15) + 15).toFixed(1);
+            document.getElementById('detalheRaio').innerText = `${(dados.raio / 1000).toFixed(2)} km`;
             
             const divTemp = document.getElementById('detalheTemp');
-            divTemp.innerText = `${tempSimulada}°C`;
-            divTemp.style.color = cor; // Pinta o número com a cor de perigo
+            // Lógica da temperatura com setinha de tendência
+            const trend = Math.random() > 0.5 ? "▲" : "▼"; 
+            divTemp.innerHTML = `${dados.temperatura}°C <small style="font-size:0.8rem">${trend}</small>`;
+            divTemp.style.color = cor;
             
-            // Atualiza a Badge
             const badge = document.getElementById('detalheStatus');
             badge.style.backgroundColor = cor;
-            if(cor === '#FF0000') { badge.innerText = "CRÍTICO"; badge.style.color = "white"; }
-            else if(cor === '#FFA500') { badge.innerText = "ATENÇÃO"; badge.style.color = "black"; }
-            else { badge.innerText = "NORMAL"; badge.style.color = "black"; }
-        }
+            badge.innerText = cor === '#FF0000' ? "CRÍTICO" : cor === '#FFA500' ? "ATENÇÃO" : "NORMAL";
+}
 
-        // Dados Mockados agora como "Objetos"
-        criarRegiaoInterativa(-21.533773, -50.625290, '#FFA500', 400000, {id: 101, nome: "Interior SP", lat: -21.53, lng: -50.62, raio: 400000, equipamento: "Satélite"});
-        criarRegiaoInterativa(34.897203, -115.93118, '#F5F527', 500000, {id: 102, nome: "Deserto Mojave", lat: 34.89, lng: -115.93, raio: 500000, equipamento: "Drone"});
-        criarRegiaoInterativa(39.174361, 21.615171, '#FF0000', 300000, {id: 103, nome: "Grécia Central", lat: 39.17, lng: 21.61, raio: 300000, equipamento: "Satélite"});
+       // Dados Mockados com Temperatura Real e Cores Automáticas
+        criarRegiaoInterativa(-21.533773, -50.625290, 400000, {id: 101, nome: "Interior SP", lat: -21.53, lng: -50.62, raio: 400000, equipamento: "Satélite", data: "12/05/2026", temperatura: 28.5});
+        criarRegiaoInterativa(34.897203, -115.93118, 500000, {id: 102, nome: "Deserto Mojave", lat: 34.89, lng: -115.93, raio: 500000, equipamento: "Drone", data: "28/05/2026", temperatura: 22.0});
+        criarRegiaoInterativa(39.174361, 21.615171, 300000, {id: 103, nome: "Grécia Central", lat: 39.17, lng: 21.61, raio: 300000, equipamento: "Satélite", data: "01/06/2026", temperatura: 38.2});
+        criarRegiaoInterativa(28.6139, 77.2090, 350000, {id: 104, nome: "Nova Delhi", lat: 28.61, lng: 77.20, raio: 350000, equipamento: "Estação Fixa", data: "03/06/2026", temperatura: 32.4});
+        criarRegiaoInterativa(-25.2744, 133.7751, 600000, {id: 105, nome: "Outback Australiano", lat: -25.27, lng: 133.77, raio: 600000, equipamento: "Satélite", data: "04/06/2026", temperatura: 36.5});
+        criarRegiaoInterativa(-75.2509, -0.0713, 1500000, {id: 106, nome: "Estação Antártica", lat: -75.25, lng: -0.07, raio: 1500000, equipamento: "Estação Fixa", data: "04/06/2026", temperatura: -15.0});
+        criarRegiaoInterativa(71.7069, -42.6043, 150000, {id: 107, nome: "Geleira de Petermann", lat: 71.70, lng: -42.60, raio: 150000, equipamento: "Satélite", data: "05/06/2026", temperatura: 26.5});
+        criarRegiaoInterativa(61.5240, 105.3188, 400000, {id: 108, nome: "Sibéria Central", lat: 61.52, lng: 105.31, raio: 400000, equipamento: "Drone", data: "05/06/2026", temperatura: 35.1});
+        criarRegiaoInterativa(11.8251, 15.5943, 280000, {id: 109, nome: "Sahel Central", lat: 11.82, lng: 15.59, raio: 280000, equipamento: "Satélite", data: "05/06/2026", temperatura: 39.0});
 
        // Se clicar no mapa vazio (desseleciona)
         map.on('click', function(e) {
+            // SE A TRAVA ESTIVER ATIVA, O MAPA ABORTA A MISSÃO E NÃO FECHA A JANELA
+            if (ignorarCliqueMapa) return;
+
             if(!modoDesenho && secaoDetalhes.classList.contains('ativa')) {
                 mudarEstadoPainel('secaoNeutro');
                 if(layerSelecionada) {
@@ -344,14 +356,11 @@
         });
 
         function fecharPoligono(e) {
-            if (e && e.originalEvent) {
-        e.originalEvent.stopPropagation();
-    }
-    
-    if (pontosPoligono.length < 3) {
-        alert("Mínimo de 3 pontos para formar uma área!");
-        return;
-    }
+                if (pontosPoligono.length < 3) {
+                    alert("Mínimo de 3 pontos para formar uma área!");
+                    return;
+                }
+
             modoDesenho = false;
             document.getElementById('map').style.cursor = '';
             document.getElementById('instrucaoDesenho').innerText = "Área demarcada. Preencha os dados abaixo.";
@@ -409,35 +418,33 @@
                 return;
             }
 
-            const coresBackEnd = ['#F5F527', '#FFA500', '#FF0000'];
-            const corSorteada = coresBackEnd[Math.floor(Math.random() * coresBackEnd.length)];
-
-            // Pinta o polígono
-            poligonoFinal.setStyle({ color: corSorteada, fillColor: corSorteada, fillOpacity: 0.6 });
+            // MÁGICA: Gera a temperatura simulada e descobre a cor correta
+            const tempSimulada = (Math.random() * (45 - 15) + 15).toFixed(1);
+            const corSorteada = obterCorTemperatura(tempSimulada);
+            const dataHoje = new Date().toLocaleDateString('pt-BR');
             
-            // Torna o novo polígono clicável!
-            const dadosNovaRegiao = {id: idReg, nome: nome, lat: lat, lng: lng, raio: raio, equipamento: tipo};
-            poligonoFinal.on('click', function(e) {
-                L.DomEvent.stopPropagation(e);
-                selecionarRegiao(dadosNovaRegiao, corSorteada);
-            });
+            const dadosNovaRegiao = {id: idReg, nome: nome, lat: lat, lng: lng, raio: raio, equipamento: tipo, data: dataHoje, temperatura: tempSimulada};
 
-            // Ativa a interação no polígono recém desenhado
+            // Aplica os visuais e o evento de clique no polígono
             aplicarEventosInterativos(poligonoFinal, corSorteada, dadosNovaRegiao);
 
-            // Força o clique para ele já abrir selecionado!
-            poligonoFinal.fire('click');
-
+            const poligonoSalvo = poligonoFinal; // Guarda o polígono para não ser apagado
             poligonoFinal = null; 
             limparDesenho();
-            selecionarRegiao(dadosNovaRegiao, corSorteada); // Já abre os detalhes da nova região
+
+            // Dispara um clique automático para já abrir o menu
+            poligonoSalvo.fire('click');
+            
+            alert(`✅ Região "${nome}" criada com sucesso!`);
         });
 
-        // --- FUNÇÃO PARA EXCLUIR ÁREA ---
+       // --- FUNÇÃO PARA EXCLUIR ÁREA ---
         document.getElementById('btnExcluirRegiao').addEventListener('click', () => {
             if (layerSelecionada) {
-                // Pergunta de segurança padrão de bons sistemas
-                if (confirm(`Tem certeza que deseja excluir o monitoramento em "${document.getElementById('detalheNome').innerText}"?`)) {
+                // Lendo o '.value' do input em vez de innerText!
+                const nomeArea = document.getElementById('detalheNome').value;
+                
+                if (confirm(`Tem certeza que deseja excluir o monitoramento em "${nomeArea}"?`)) {
                     // Remove o objeto visual do mapa Leaflet
                     map.removeLayer(layerSelecionada); 
                     
